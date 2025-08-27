@@ -36,15 +36,15 @@ RUN bundle exec bootsnap precompile app/ lib/
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
+# Throw-away build stage to reduce size of final image
+FROM base as build
 
-# Final stage for app image
-FROM base
-
-# Install packages needed for deployment
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips && \
+# Install packages needed to build gems
+RUN sed -i 's|deb.debian.org|ftp.debian.org|g' /etc/apt/sources.list && \
+    apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git libvips pkg-config
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
-
+    
 # Copy built artifacts: gems, application
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /rails /rails
