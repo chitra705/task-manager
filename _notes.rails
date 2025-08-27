@@ -1,0 +1,67 @@
+
+<%# dashboard-filter %>
+<div class="filters">
+  <form method="get">
+    <label for="status">Filter by Status:</label>
+    <select name="status" id="status">
+      <option value="">All</option>
+      <option value="active" <%= 'selected' if params[:status] == 'active' %>>Active</option>
+      <option value="paused" <%= 'selected' if params[:status] == 'paused' %>>Paused</option>
+      <option value="completed" <%= 'selected' if params[:status] == 'completed' %>>Completed</option>
+    </select>
+    <button type="submit">Apply Filter</button>
+  </form>
+
+  <form method="get" class="filter-form">
+    <label for="completion_time_filter">Completion Time Filter:</label>
+    <select name="completion_time_filter" id="completion_time_filter">
+      <option value="">All</option>
+      <option value="this_week" <%= 'selected' if params[:completion_time_filter] == 'this_week' %>>This Week</option>
+      <option value="last_week" <%= 'selected' if params[:completion_time_filter] == 'last_week' %>>Last Week</option>
+      <option value="last_month" <%= 'selected' if params[:completion_time_filter] == 'last_month' %>>Last Month</option>
+    </select>
+    <button type="submit">Apply Filter</button>
+  </form>
+
+  <form method="get" class="filter-form">
+    <label for="assigned_filter">Assigned Filter:</label>
+    <select name="assigned" id="assigned_filter">
+      <option value="">All</option>
+      <option value="assigned" <%= 'selected' if params[:assigned] == 'assigned' %>>Assigned</option>
+      <option value="not_assigned" <%= 'selected' if params[:assigned] == 'not_assigned' %>>Not Assigned</option>
+    </select>
+    <button type="submit">Apply Filter</button>
+  </form>
+</div>
+
+
+
+
+  def create
+    emp = Emp.find_by(user_id:current_user.id)
+    
+    emp_detail = EmpDetail.find(emp_id: emp_id)
+    given_amount = params[:given_amount].to_f
+
+    # Calculate total given amount
+    total_given_amount = emp_detail.payment_details.sum(:given_amount) + given_amount
+
+    # Ensure given amount does not exceed the basic salary
+    if total_given_amount > emp_detail.basic_salary
+      render json: { error: 'Payment exceeds total salary!' }, status: :unprocessable_entity
+      return
+    end
+
+    payment = emp_detail.payment_details.create(
+      total_salary: emp_detail.basic_salary,
+      given_amount: given_amount,
+      user_id: current_user.id,
+      details_img: params[:details_img]
+    )
+
+    if payment.save
+      render json: { message: 'Payment recorded successfully!', payment: payment }, status: :ok
+    else
+      render json: { error: payment.errors.full_messages }, status: :unprocessable_entity
+    end
+  end

@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Payslip for <%= @payslip.user.name %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      color: #333;
+    }
+    .payslip-container {
+      max-width: 800px;
+      margin: 20px auto;
+      padding: 30px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+    .header {
+      text-align: center;
+      font-weight: bold;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .sub-header {
+      text-align: center;
+      font-weight: bold;
+      font-size: 18px;
+      color: #555;
+      margin-bottom: 40px;
+    }
+    .payslip-details, .earnings-deductions {
+      width: 100%;
+      margin: 20px 0;
+      border-collapse: collapse;
+    }
+    .payslip-details th, .earnings-deductions th {
+      text-align: left;
+      padding: 10px;
+      border: 1px solid #ddd;
+      font-weight: bold;
+      background-color: #f1f1f1;
+    }
+    .payslip-details td, .earnings-deductions td {
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+    .earnings-deductions .section-title {
+      text-align: center;
+      font-weight: bold;
+      margin: 20px 0;
+    }
+    .signature-section {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 30px;
+    }
+    .signature {
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+
+  <div class="payslip-container">
+   
+
+
+    <div style="text-align: center; background-color:#074f8a; color: #b3c0c8;">
+      <div>
+        <%= image_tag 'Ikasle_Logo.png', alt: 'Ikasle', style: 'height: 100px; width:120px;' %>
+      </div> 
+    </div>
+
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px;">
+  
+      <div style="flex: 0 0 auto;">
+        Reg No :TN030108057<br>
+        GST    :33BIEPA1248K1ZN
+      </div>
+      
+      <!-- Address on the right -->
+      <div style="flex: 1 1 auto; text-align: right;">
+        <p>
+          1639/A, 2nd Floor, DJ Building,<br>
+          Hopes College, Avinashi Road, Peelamedu,<br>
+          Coimbatore - 641004
+        </p>
+      </div>
+
+    </div>
+
+
+
+    <%# <div class="sub-header"style="padding-top: 15px;"><h5><b>PAYSLIP</b></h5></div> %>
+
+    <div class="container">
+      <div class="row">
+        <!-- Left side: Address (col-lg-6) -->
+        <div class="col-lg-6" style="padding: 10px; ">
+
+          <ul class="payslip-details" style="list-style-type: none; padding: 0; margin: 0;">
+            <li style="padding: 6px;">
+              <strong style="padding-right: 10px;">Date of Joining </strong>: <%= @payslip.user.joining_date %>
+            </li>
+            <li style="padding: 6px;">
+              <strong style="padding-right: 43px;">Pay Period </strong>: <%= @payslip.pay_period %>
+            </li>
+            <li style="padding: 6px;">
+              <strong style="padding-right: 25px;">Worked Days </strong>: <%= @payslip.worked_days %>
+            </li>
+            
+          </ul>      
+        </div>
+
+        <!-- Right side: Payslip Details (col-lg-6) -->
+        <div class="col-lg-6" style="padding-left: 70px;">
+          
+
+          <ul class="payslip-details mt-3" style="list-style-type: none; padding: 0; margin: 0;">
+            <li style="padding: 6px;">
+              <strong style="padding-right: 10px;">Employee Name </strong>: <%= @payslip.user.name %>
+            </li>
+            <li style="padding: 6px;">
+              <strong style="padding-right: 42px;">Designation </strong>: <%= @payslip.designation %>
+            </li>
+            <li style="padding: 6px;">
+              <strong style="padding-right: 46px;">Department </strong>: <%= @payslip.department %>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title mt-4" style="padding:5px"><h5><b>Earnings and Deductions</b></h5></div>
+
+    <table class="earnings-deductions">
+      <tr>
+        <th>Earnings</th>
+        <th>Earning Amounts</th>
+        <th>Deductions</th>
+        <th>Deduction Amounts</th>
+      </tr>
+      <% @payslip.payslip_values.each do |pv| %>
+        <tr>
+          <td><%= pv.earnings %></td>
+          <td><%= pv.earning_amount %></td>
+          <td><%= pv.deductions %></td>
+          <td><%= pv.deduction_amount %></td>
+        </tr>
+      <tr>
+        <th>Total Earnings</th>
+        <td><%= pv.earning_amount %></td>
+        <th>Total Deductions</th>
+        <td><%= pv.deduction_amount %></td>
+      </tr>
+      
+
+      <tr>
+        <th colspan="3">Net Pay</th>
+        <td><%= pv.earning_amount - pv.deduction_amount %></td>
+      </tr>
+      
+      <tr>
+        <th colspan="4" style="text-align: center;">
+          <%= pv.earning_amount - pv.deduction_amount %>
+        </th>
+      </tr>
+      <% end %>
+    </table>
+      <%= image_tag 'sign.png', alt: 'Ikasle', style: 'height: 100px; width:120px; margin-top:10px' %><br>
+
+    <div class="signature-section" style="margin-top:0px;margin-bottom: 50px;">
+      <div class="signature">
+        <b>Employer Signature</b></div>
+      <div class="signature"><b>Employee Signature</b></div>
+    </div>
+
+    <p style="text-align: center; margin-top: 20px; color: #888;">
+      <b>Ikasle Business Group </b>
+      <%# <i class="bi bi-heart-fill" style="color:#064e89"></i> %>
+    </p>
+  </div>
+   <div class="button-section">
+  <%= link_to 'Download Payslip', payslip_path(@payslip, format: :pdf), class: "btn btn-primary", target: "_blank" %>
+  <%= link_to 'Back', payslips_path, class: "btn btn-gray" %>
+
+  
+
+</div>
+
+</body>
+</html>

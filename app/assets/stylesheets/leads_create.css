@@ -1,0 +1,56 @@
+body{
+  font-family:Arial, sans-serif;
+}
+.text-center{
+  margin-top: 10px;
+  margin-bottom: 20px;
+}
+.btn-gray {
+  background-color: #2267AB;
+  color: white;
+  border: 1px solid #2267AB;
+  margin-top: 10px;
+}
+
+.btn-gray:hover {
+  background-color: #1c6fa5;
+  border: 1px solid #1c6fa5;
+  color: black;
+}
+.text-center {
+  margin-top: 20px;
+}
+.leads {
+  border: 1px solid;
+  border-radius: 15px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  margin-left: 130px;
+}
+.file-upload {
+  text-align: center;
+  display: flex;
+  border-style: dashed;
+  border: 1px solid dashed;
+  flex-direction: column;
+  justify-content: center;
+}
+.leads, .file-upload {
+  border-radius: 15px;
+  padding: 15px;
+  width: 80%;
+  height: 500px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+}
+.input-group-text {
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}

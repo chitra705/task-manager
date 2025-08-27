@@ -1,0 +1,6 @@
+<% if @project_task.destroyed? %>
+  $("#task_<%= @project_task.id %>").remove();
+  alert('Task was successfully destroyed.');
+<% else %>
+  alert('Failed to destroy the project task.');
+<% end %>

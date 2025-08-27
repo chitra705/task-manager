@@ -1,0 +1,10 @@
+<h1>Forgot Your Password?</h1>
+<%= form_with url: send_otp_passwrds_path, method: :post, local: true do |form| %>
+  <div>
+    <%= form.label :email, "Enter your email address" %>
+    <%= form.email_field :email, autofocus: true %>
+  </div>
+  <div>
+    <%= form.submit 'Send OTP' %>
+  </div>
+<% end %>

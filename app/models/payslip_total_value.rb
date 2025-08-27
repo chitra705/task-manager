@@ -1,0 +1,2 @@
+class PayslipTotalValue < ApplicationRecord
+end

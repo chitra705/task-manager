@@ -1,0 +1,101 @@
+/* app/assets/stylesheets/registrations.css */
+
+/* Basic styles */
+.form-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.field2{
+  background-color: green;
+}
+
+.form-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.form-container .field {
+  margin-bottom: 15px;
+}
+
+.form-container label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="password"],
+.form-container select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.form-container .actions {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.form-container .actions input[type="submit"] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.form-container .actions input[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.form-container .field .styled-input {
+  width: 95%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  transition: border-color 0.3s ease-in-out;
+  /* Additional styles specific to the email field */
+  color: #333333; /* Text color */
+  font-style: italic; /* Italic text style */
+}
+
+.form-container .field .styled-input::placeholder {
+  color: #999999; /* Placeholder text color */
+  font-style: normal; /* Normal font style for placeholder */
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .form-container {
+    width: 80%;
+    padding: 15px;
+  }
+}
+
+.password-field {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 30px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  margin-top: 25px;
+}
+
+.toggle-password .fa {
+  font-size: 18px;
+}

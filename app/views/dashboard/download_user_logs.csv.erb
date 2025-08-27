@@ -1,0 +1,7 @@
+<%= CSV.generate(headers: true) do |csv| %>
+  <%= csv << ['User', 'Login Time', 'Check-in Time', 'Check-out Time', 'Logout Time']
+  
+  <% @user_logs.each do |log| %>
+    <%= csv << [log.user.name, log.login_time&.strftime('%H:%M'),log.check_in&.strftime('%H:%M'), log.check_out&.strftime('%H:%M'),log.logout_time&.strftime('%H:%M')] %>
+  <% end %>
+<% end %>

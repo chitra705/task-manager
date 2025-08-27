@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= stylesheet_link_tag 'show_task', media: 'all', 'data-turbolinks-track': 'reload' %>
+</head>
+<body>
+   
+  <div class="row" style="padding-left: 50px;">
+
+    <div class="col-md-6 d-flex align-items-center justify-content-center">
+      <%= image_tag 'task_show.png', alt: 'otp', class: 'img-fluid rotate-on-hover', style: 'height: 530px;' %>
+    </div>
+
+
+    <div class="col-md-4 d-flex align-items-center" id="task">
+
+      <div class="container mt-3">
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <%= link_to '<i class="fas fa-arrow-left"></i>'.html_safe, tasks_path, class: "btn btn-link" %>
+          </div>
+          <div class="col text-center">
+            <h5 class="mb-0"><%= @project_task.title.to_s.titleize %></h5>
+          </div>
+          <div class="col-auto">
+            <%= link_to '<i class="fas fa-edit"></i>'.html_safe, edit_task_path(@project_task), class: "btn btn-link" %>
+            <%= link_to '<i class="fas fa-trash-alt"></i>'.html_safe, task_delete_task_path(@project_task), method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-link" %>
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <p>
+            <strong>Description:</strong>
+            <span class="text-muted"><%= @project_task.description %></span>
+          </p>
+
+          <p>
+            <strong>Status:</strong>
+            <span class="badge <%= @project_task.status == 'active' ? 'bg-success' : 'bg-danger' %>">
+              <%= @project_task.status.humanize %>
+            </span>
+          </p>
+
+          <p>
+            <strong>Assigned To:</strong>
+            <span class="text-muted"><%= @project_task.assigned_to&.name %></span>
+          </p>
+
+          <p>
+            <strong>Duration:</strong>
+            <span class="text-muted"><%= @project_task.duration %></span>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>
+
+
+
+

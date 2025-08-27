@@ -1,0 +1,23 @@
+# app/views/dashboard/download_user_logs.html.erb
+<table border="1" cellpadding="10" cellspacing="0">
+  <thead>
+    <tr>
+      <th>User</th>
+      <th>Login Time</th>
+      <th>Check-in Time</th>
+      <th>Check-out Time</th>
+      <th>Logout Time</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @user_logs.each do |log| %>
+      <tr>
+        <td><%= log.user.name %></td>
+        <td><%= log.login_time&.strftime('%H:%M') %></td>
+        <td><%= log.check_in&.strftime('%H:%M') %></td>
+        <td><%= log.check_out&.strftime('%H:%M') %></td>
+        <td><%= log.logout_time&.strftime('%H:%M') %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

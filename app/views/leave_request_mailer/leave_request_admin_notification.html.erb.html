@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+</head>
+<body>
+  <h1>New Leave Request</h1>
+  <p>A new leave request has been submitted by <%= @leave_request.user.name %>.</p>
+  <p><strong>Date:</strong> <%= @leave_request.leave_date.strftime("%B %d, %Y") %></p>
+  <p><strong>Reason:</strong> <%= @leave_request.leave_reason %></p>
+</body>
+</html>

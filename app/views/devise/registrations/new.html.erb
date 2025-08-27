@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Registration</title>
+  <%= stylesheet_link_tag 'registrations', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= csrf_meta_tags %>
+
+  <style>
+    .error-message {
+      color: red; 
+      font-size: 10px;
+      margin-top: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="form-container">
+    <h2>Sign Up</h2>
+    
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { id: 'registration-form' }) do |f| %>
+      <%= devise_error_messages! %>
+
+      <div class="field">
+        <%= f.label :name %><br />
+        <%= f.text_field :name, autofocus: true, autocomplete: "name", placeholder: "Enter your name", class: "styled-input" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :role %><br />
+        <%= f.select :role, User.roles.keys.map { |role| [role.humanize, role] }, {}, { placeholder: "Select your role" }%>
+      </div>
+
+      <div class="field">
+        <%= f.label :team_type %><br />
+        <%= f.select :team_type, User.team_types.keys.map { |team| [team.humanize, team] }, {}, { placeholder: "Select your team type" } %>
+      </div>
+
+
+      <div class="field">
+        <%= f.label :mobile %><br />
+        <%= f.number_field :mobile, autocomplete: "mobile", placeholder: "Enter your mobile number", class: "styled-input" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :email %><br />
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Enter your email address", class: "styled-input" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :dob %><br />
+        <%= f.date_field :dob, placeholder: "Select your date of birth", class: "styled-input" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :address %><br />
+        <%= f.text_field :address, placeholder: "Enter your address", class: "styled-input" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :location %><br />
+        <%= f.text_field :location, placeholder: "Enter your location", class: "styled-input" %>
+      </div>
+
+      <div class="field">
+        <%= f.label :blood_group %><br />
+        <%= f.text_field :blood_group, placeholder: "Enter your blood group", class: "styled-input" %>
+      </div>
+
+      <div class="field password-field">
+        <%= f.label :password %><br />
+        <%= f.password_field :password, autofocus: true, autocomplete: "new-password", placeholder: "Enter your password", class: "styled-input password-input" %><span class="toggle-password"><i class="fa fa-eye"></i></span>
+        <span class="password-error error-message"></span>
+        
+      </div>
+
+      <div class="field password-field">
+        <%= f.label :password_confirmation %><br />
+        <%= f.password_field :password_confirmation, autofocus: true, autocomplete: "new-password", placeholder: "Confirm your password", class: "styled-input password-input" %>
+        <span class="password-confirmation-error error-message"></span>
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Sign up", id: 'submit-button' %>
+      </div>
+    <% end %>
+
+    <%= render "devise/shared/links" %>
+  </div>
+</body>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const togglePasswordIcons = document.querySelectorAll('.toggle-password');
+    const form = document.getElementById('registration-form');
+
+    togglePasswordIcons.forEach(icon => {
+      icon.addEventListener('click', function() {
+        const passwordField = this.previousElementSibling;
+        const type = passwordField.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordField.setAttribute('type', type);
+        this.querySelector('i').classList.toggle('fa-eye');
+        this.querySelector('i').classList.toggle('fa-eye-slash');
+      });
+    });
+
+    form.addEventListener('submit', function(event) {
+      const password = document.querySelector('input[name="user[password]"]').value;
+      const passwordConfirmation = document.querySelector('input[name="user[password_confirmation]"]').value;
+      const errorMessages = [];
+
+      // Clear previous error messages
+      document.querySelector('.password-error').textContent = '';
+      document.querySelector('.password-confirmation-error').textContent = '';
+
+      // Check password length
+      if (password.length < 8) {
+        document.querySelector('.password-error').textContent = "Password must be at least 8 characters long.";
+        errorMessages.push("Password must be at least 8 characters long.");
+      }
+
+      // Check for uppercase letter
+      if (!/[A-Z]/.test(password)) {
+        document.querySelector('.password-error').textContent += " Password must include at least one uppercase letter.";
+        errorMessages.push("Password must include at least one uppercase letter.");
+      }
+
+      // Check for lowercase letter
+      if (!/[a-z]/.test(password)) {
+        document.querySelector('.password-error').textContent += " Password must include at least one lowercase letter.";
+        errorMessages.push("Password must include at least one lowercase letter.");
+      }
+
+      // Check for digit
+      if (!/[0-9]/.test(password)) {
+        document.querySelector('.password-error').textContent += " Password must include at least one digit.";
+        errorMessages.push("Password must include at least one digit.");
+      }
+
+      // Check for special character
+      if (!/[\W_]/.test(password)) {
+        document.querySelector('.password-error').textContent += " Password must include at least one special character.";
+        errorMessages.push("Password must include at least one special character.");
+      }
+
+      // Check password confirmation
+      if (password !== passwordConfirmation) {
+        document.querySelector('.password-confirmation-error').textContent = "Passwords do not match.";
+        errorMessages.push("Passwords do not match.");
+      }
+
+      if (errorMessages.length > 0) {
+        event.preventDefault(); // Prevent form submission
+      }
+    });
+  });
+</script>
+
+  
+
+</html>

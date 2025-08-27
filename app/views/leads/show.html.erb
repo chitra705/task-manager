@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lead Details</title>
+  <style>
+    body {
+      background-color: #f8f9fa;
+      font-family: Arial, sans-serif;
+    }
+    .lead-details-container {
+      max-width: 800px;
+      margin: 50px auto;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+    h2 {
+      text-align: center;
+      color: #343a40;
+      font-weight: bold;
+    }
+    .table th {
+      width: 30%;
+      color: #495057;
+      background-color: #f1f1f1;
+    }
+    .table td {
+      color: #212529;
+      text-align: left;
+    }
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .btn-container .btn {
+      margin: 0 10px;
+      width: 100px;
+    }
+  </style>
+</head>
+<body>
+  <div class="lead-details-container">
+    <h2>Lead Details</h2>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <th>Status</th>
+            <td><%= @lead.status %></td>
+          </tr>
+          <tr>
+            <th>Category</th>
+            <td><%= @lead.category %></td>
+          </tr>
+          <tr>
+            <th>Category Name</th>
+            <td><%= @lead.category_name %></td>
+          </tr>
+          <tr>
+            <th>Business Name</th>
+            <td><%= @lead.business_name %></td>
+          </tr>
+          <tr>
+            <th>Address</th>
+            <td><%= @lead.address %></td>
+          </tr>
+          <tr>
+            <th>Phone</th>
+            <td><%= @lead.phone %></td>
+          </tr>
+          <tr>
+            <th>City</th>
+            <td><%= @lead.city %></td>
+          </tr>
+          <tr>
+            <th>Website</th>
+            <td><%= @lead.website %></td>
+          </tr>
+          <tr>
+            <th>Map Link</th>
+            <td><%= @lead.map_link %></td>
+          </tr>
+          <tr>
+            <th>City</th>
+            <td><%= @lead.city %></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="btn-container">
+      <%= link_to 'Back', leads_path, class: 'btn btn-secondary' %>
+      <%= link_to 'Edit', edit_lead_path(@lead), class: 'btn btn-warning' %>
+      <%= link_to 'Delete', lead_delete_lead_path(@lead), method: :delete, data: { confirm: 'Are you sure?' }, class: 'btn btn-danger' %>
+    </div>
+  </div>
+
+  <!-- Include Bootstrap JS -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

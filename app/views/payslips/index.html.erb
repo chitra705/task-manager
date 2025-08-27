@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+</head>
+<body>  
+
+  <% if @payslips.present? %>
+    <div class="container mt-5" style="padding-bottom: 230px;">
+      
+      <!-- Buttons at the top -->
+      <div class="d-flex justify-content-between mb-4">
+        <%= link_to "New Payslip", new_payslip_path, class: 'btn btn-success' %>
+        <%= link_to "Download Payslips", download_payslips_payslips_path, class: 'btn btn-primary' %>
+      </div>
+      
+     
+      
+      <div class="table-responsive" style="padding-top: 50px;">
+        <table class="table table-striped table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th class="text-center">id</th>
+              <th class="text-center">Pay Period</th>
+              <th class="text-center">Worked Days</th>
+              <th class="text-center">Designation</th>
+              <th class="text-center">User Name</th>
+              <th class="text-center">Show</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @payslips.each do |payslip| %>
+              <tr>
+                <td class="text-center"><%= payslip.id %></td>
+                <td class="text-center"><%= payslip.pay_period %></td>
+                <td class="text-center"><%= payslip.worked_days %></td>
+                <td class="text-center"><%= payslip.designation %></td>
+                <td class="text-center"><%= payslip.user.present? ? payslip.user.name : 'No User' %></td>
+                <td><%= link_to "show", payslip_path(payslip), class: 'btn btn-info' %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% else %>
+    <div class="mb-4" style="text-align: center; padding: 35px;">
+      <%= image_tag 'ety.png', alt: 'otp', class: 'img-fluid rotate-on-hover', style: 'height: 460px;' %>
+    </div>
+  <% end %>
+
+</body>
+</html>

@@ -1,0 +1,176 @@
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  font-size: 1.5rem;
+  color: #143b9a;
+  font-weight: bold;
+}
+
+.div1 {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+}
+
+.div2 {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  width: 40%;
+}
+
+.div3 {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  margin:80px;
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.div3:hover {
+  box-shadow: 0 0 20px rgb(4,81,148); /* Neon effect with cyan color */
+  transform: scale(1.00); /* Slightly enlarge the element on hover */
+}
+
+.today-log{
+  background-color: #fff;
+  border-radius: 2px;
+  padding: 20px;
+
+}
+
+.div2:hover {
+  box-shadow: 
+    0 0 10px rgba(0, 255, 255, 0.6), /* Cyan glow */
+    0 0 20px rgba(0, 255, 255, 0.6), /* Larger cyan glow */
+    0 0 10px rgba(255, 0, 255, 0.6), /* Magenta glow */
+    0 0 20px red; /* Larger magenta glow */
+  transform: scale(1.00); /* Slightly enlarge the element on hover */
+}    
+
+h4 {
+  margin-top: 0;
+  color: #555;
+}
+
+.chart-size {
+  max-width: 100px;
+  max-height: 100px;
+}
+
+.status-info {
+  margin-top: 10px;
+  color: #666;
+}
+.filters {
+  display: flex;
+  justify-content: center; 
+  flex-wrap: wrap; 
+  margin-bottom: 20px;
+}
+
+.filter-form {
+  margin: 0 10px;
+}
+button{
+  border: 1px solid;
+  border-radius: 5px;
+}
+ 
+.btn-primary {
+  margin-left: 10px;
+}
+
+.task-card {
+  margin-bottom: 20px;
+}
+
+.task-timers p {
+  margin: 0;
+}
+
+.task-timers span {
+  margin-left: 5px;
+}
+.overdue-message {
+  color: #ff0000;
+  font-weight: bold; /* Optional: make text bold */
+}
+.btn-custom{
+  border: 1px;
+  padding: 3px;
+  font-size: 13px;
+  background-color:#1e81b0 ;
+  color: #eeeee4;
+  margin: 2px;
+  width:70px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse; 
+
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #6D6D6D;
+  text-align: left;
+  text-align: center;
+
+}
+th{
+  z-index: 10;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.thead-dark {
+  background-color: #424242;
+  color: wheat;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.table-container{
+  margin: 50px;
+}
+h3{
+  text-align: center;
+  color: #555;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+.log_table{
+  padding: 20px;
+  background-color: #1c6fa5;
+}
+.log_text{
+  font-size: 20px;
+  font-weight: bold;
+  color: ghostwhite;
+}
+
+.table-container .table-responsive {
+  max-height:250px;
+  overflow-y: auto;
+}
+.task_duration{
+  margin-bottom: 50px;
+  padding: 80px;
+
+}
+.card-board{
+    background: #ffffff61;
+    padding: 25px;
+    width:400px;
+    height:300px;
+    margin-left: 40px;
+    margin-left: 40px;
+}
+
+

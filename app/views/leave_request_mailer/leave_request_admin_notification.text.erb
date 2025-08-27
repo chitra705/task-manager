@@ -1,0 +1,6 @@
+New Leave Request
+
+A new leave request has been submitted by <%= @leave_request.user.name %>.
+
+Date: <%= @leave_request.leave_date.strftime("%B %d, %Y") %>
+Reason: <%= @leave_request.leave_reason %>

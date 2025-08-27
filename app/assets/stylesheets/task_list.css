@@ -1,0 +1,94 @@
+.btn-gray {
+  background-color: gray;
+  color: white;
+  border: 1px solid gray;
+}
+
+.btn-gray:hover {
+  background-color: darkgray;
+  border: 1px solid darkgray;
+}
+
+.card-status {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #f8f9fa;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.card-body {
+  position: relative;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 2px solid;
+}
+
+.status-active {
+  border-color: green;
+}
+
+.status-paused {
+  border-color: yellow;
+}
+
+.status-completed {
+  border-color: blue;
+}
+
+.card-icons {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-icon {
+  background: none;
+  border: none;
+  color: gray;
+  cursor: pointer;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.btn-icon:hover {
+  color: darkgray;
+}
+
+.form-inline {
+  display: flex;
+  align-items: center;
+}
+
+.form-inline .form-control {
+  margin-right: 5px;
+}
+
+.card {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+h3{
+  color: #143b9a;
+  font-weight: bold;
+}
+.no_task{
+  padding-bottom: 50px;
+  font-weight: bold;
+  font-size: 30px;
+  color: gray;
+  align-items: center;
+  padding: 100px;
+ 
+}

@@ -1,0 +1,258 @@
+
+<%# user_logs/show.html.erb %>
+
+
+<style>
+  .table-container .table-responsive {
+    max-height: 350px;
+    overflow-y: auto;
+    min-height: 350px;
+}
+
+  .user_log_head{
+    text-align: center;
+    color: #143b9a;
+    font-weight: bold;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    font-size: 24px;
+  }
+  .filter_btn{
+    background-color: #007bff;
+    color:white;
+  }
+
+  /* Table headers */
+  .thead-dark {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  /* Cell padding and borders */
+  .table td, .table th {
+    padding: 15px 20px;
+    vertical-align: middle;
+    text-align: center;
+    border: 1px solid #dee2e6;
+  }
+
+  /* Row hover effect */
+  .table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transform: scale(1.02);
+    transition: background-color 0.3s, transform 0.3s;
+  }
+
+  /* Status colors */
+  .table td:nth-child(2) {
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+
+  .table td:nth-child(2).pending {
+    color: #f39c12; /* Yellow for pending */
+  }
+
+  .table td:nth-child(2).approved {
+    color: #27ae60; /* Green for approved */
+  }
+
+  .table td:nth-child(2).rejected {
+    color: #e74c3c; /* Red for rejected */
+  }
+
+ .leave-reason {
+    display: none;
+  }
+
+
+
+  .hover-text {
+    font-size: 14px;
+    color: #3498db;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+
+  /* "No leave requests" message */
+  .text-center {
+    font-size: 16px;
+    font-weight: bold;
+    color: #888;
+    padding: 15px;
+  }
+
+  /* Styling for the table footer */
+  .table-footer {
+    font-size: 14px;
+    color: #777;
+    text-align: right;
+    padding: 10px 15px;
+  }
+  /* Status colors */
+.table td:nth-child(2) {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+/* Accepted (Green) */
+.table td:nth-child(2).accepted {
+  color: #27ae60; /* Green for Approved */
+  background-color: #dff0d8; /* Light Green background */
+  border-radius: 5px;
+  padding: 5px;
+}
+
+/* Pending (Yellow) */
+.table td:nth-child(2).pending {
+  color: #f39c12; /* Yellow for Pending */
+  background-color: #fff3cd; /* Light Yellow background */
+  border-radius: 5px;
+  padding: 5px;
+}
+
+/* Rejected (Red) */
+.table td:nth-child(2).rejected {
+  color: #e74c3c; /* Red for Rejected */
+  background-color: #f8d7da; /* Light Red background */
+  border-radius: 5px;
+  padding: 5px;
+}
+
+@media (max-width: 768px) {
+  .table-wrapper {
+    
+    min-height: 652px;
+    width:350px;
+  }
+  .card-board{
+
+    width:300px;
+    margin-left: 4px !important;
+    margin-left: 4px !important;
+  }
+}
+
+
+<%# task duration style %>
+
+/* Task Card Styles */
+
+
+/* Form Styling */
+.form-select {
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 0.9rem;
+}
+
+.btn-custom {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 5px 15px;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.btn-custom:hover {
+  background-color: #0056b3;
+}
+
+
+
+</style>
+
+<% if current_user.admin? || current_user.manager? || current_user.team_lead? %>
+
+
+<div class="d-flex justify-content-between  align-items-center table-container mb-3">
+  
+  <!-- User Logs Heading (Centered) -->
+  <h5 class="user_log_head mx-auto mb-0">USER LOGS</h5>
+
+  <!-- Filter Icon and Download CSV Button (Right side) -->
+  <div class="d-flex align-items-center">
+      <!-- Filter Icon -->
+      <button id="toggle-filter-btn" class="btn filter_btn mr-2" type="button">
+        <i class="fas fa-filter"></i>
+      </button>
+
+      <!-- Download CSV Button -->
+      <%= link_to download_user_logs_dashboard_index_path(format: :csv), class: 'btn btn-success' do %>
+        <i class="fas fa-cloud-download-alt"></i> <!-- Updated download icon -->
+      <% end %>
+    </div>
+  </div>
+
+<!-- Filter Form (Initially hidden, will toggle visibility on button click) -->
+<div id="filter-form" class="d-none mt-2">
+  <%= form_tag(daily_log_user_user_logs_path, method: :get, class: 'form-inline') do %>
+    <div class="form-group mr-1">
+      <label for="date_range_start" class="mr-1">Start Date:</label>
+      <%= date_field_tag :date_range_start, params[:date_range_start], class: 'form-control' %>
+    </div>
+    <div class="form-group mr-1">
+      <label for="date_range_end" class="mr-1">End Date:</label>
+      <%= date_field_tag :date_range_end, params[:date_range_end], class: 'form-control' %>
+    </div>
+    <%= button_tag(type: 'submit', class: 'btn btn-primary') do %>
+      Apply
+    <% end %>
+  <% end %>
+</div>
+
+
+
+<div class="table-container">
+  <% if @teams_with_logs.present? %>
+    <% @teams_with_logs.each do |team, logs| %>
+      <h5><b><%= team.to_s.titleize %> :</b></h5>
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th>User</th>
+              <th>Login Time</th>
+              <th>Check-in Time</th>
+              <th>Check-out Time</th>
+              <th>Logout Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% logs.each do |log| %>
+              <tr>
+                <td><%= log.user.name.to_s.titleize %></td>
+                <td><%= log.login_time&.strftime('%H:%M') || 'N/A' %></td>
+                <td><%= @user_check_logs.find_by(user_id: log.user_id)&.check_in&.strftime('%H:%M') || 'N/A' %></td>
+                <td><%= @user_check_logs.find_by(user_id: log.user_id)&.check_out&.strftime('%H:%M') || 'N/A' %></td>
+                <td><%= log.logout_time&.strftime('%H:%M') || 'N/A' %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% end %>
+  <% else %>
+    <p>No logs available for the selected date range.</p>
+  <% end %>
+</div>
+<% end %>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterBtn = document.getElementById('toggle-filter-btn');
+    const filterForm = document.getElementById('filter-form');
+
+    filterBtn.addEventListener('click', () => {
+      // Toggle the visibility of the filter form
+      filterForm.classList.toggle('d-none');
+    });
+  });
+</script>

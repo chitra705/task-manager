@@ -1,0 +1,192 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  padding-top: 70px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #2267AB;
+  color: white;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.logo img {
+  height: 60px;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  margin-left: 20px;
+  
+}
+
+.nav-link {
+  font-weight: bold;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-left: 20px;
+  color: #ffffff !important;
+}
+
+.nav-link:hover {
+  color:#1c6fa5 !important;
+  background-color:#ffffff ;
+}
+
+.session-profile {
+  display: flex;
+  align-items: center;
+}
+
+.active-session {
+  margin-right: 20px;
+  font-size: 16px;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropbtn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #7EA4CA;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.active-session {
+  margin-right: 20px;
+  font-size: 10px;
+  color: #333; 
+  background-color: #fff; 
+  padding: 9px;
+  border-radius: 4px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+.break-session{
+  margin-right: 20px;
+  font-size: 10px;
+  color: #333; 
+  background-color: #fff; 
+  padding: 9px;
+  border-radius: 5px; 
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+#active-session-time{
+  color:black;
+}
+#break-session-time{
+  color: black;
+}
+#check-in-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-right:10px;
+
+}
+
+#check-in-btn:hover {
+  background-color: #45a049;
+}
+
+#check-out-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 6px;
+  margin-right:10px;
+}
+.check-in-out {
+  margin-right: 10px; 
+}
+
+#break-btn{
+  color: black;
+  border: none;
+  padding: 8px 15px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right:10px;
+}
+
+
+#end-break-btn{
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  font-size: 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-right:10px;
+}
+
+.navbar-custom {
+  background-color: #1c6fa5;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.navbar-custom .nav-link {
+  color: white;
+}
+.navbar-custom .nav-link:hover {
+  color: white;
+}
+#task-list-section{
+  margin-bottom: 30px;
+}
+/*.rotate-on-hover {
+  transition: transform 0.8s; 
+}
+
+.rotate-on-hover:hover {
+  transform: rotate(360deg);
+}*/

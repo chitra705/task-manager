@@ -1,0 +1,20 @@
+<!-- app/views/user_mailer/admin_approval_request.html.erb -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>New User Registration Approval Needed</h1>
+    <p>A new user has registered and requires your approval:</p>
+    <p>
+      Name: <%= @user.name %><br />
+      Email: <%= @user.email %><br />
+      Role: <%= @user.role %>
+    </p>
+    <p>
+      Please visit the admin panel to approve or reject this registration.
+    </p>
+    <p>Thank you!</p>
+  </body>
+</html>

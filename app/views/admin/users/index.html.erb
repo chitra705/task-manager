@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>user requests</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <%= stylesheet_link_tag 'user_req_table', media: 'all', 'data-turbo-track': 'reload' %>
+</head>
+<body>
+  <div class="container mt-5">
+    <h5 class="mb-4 text-center">USERS REQUEST</h5>
+    <table class="table table-striped table-bordered">
+      <thead class="thead-dark">
+        <tr>
+          <th class="text-center">Name</th>
+          <th class="text-center">Email</th>
+          <th class="text-center">Status</th>
+          <th class="text-center" colspan="2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td class="text-center"><%= user.name %></td>
+            <td class="text-center"><%= user.email %></td>
+            <td class="text-center"><%= user.approved? ? 'Approved' : 'Pending' %></td>
+            <td class="text-center">
+              <% if !user.approved? %>
+                <%= button_to 'Approve', approve_admin_user_path(user), method: :post, class: 'btn btn-success' %>
+              <% end %>
+            </td>
+            <td class="text-center">
+              <%= button_to 'Reject', reject_admin_user_path(user), method: :patch, class: 'btn btn-danger' %>
+
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

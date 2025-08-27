@@ -1,0 +1,24 @@
+<!-- app/views/user_logs/download_user_logs.html.erb -->
+
+<h1>Task List</h1>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Task Title</th>
+      <th>Description</th>
+      <th>Status</th>
+      <th>Assigned To</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tasks.each do |task| %>
+      <tr>
+        <td><%= task.title %></td>
+        <td><%= task.description %></td>
+        <td><%= task.status.titleize %></td>
+        <td><%= task.assigned_to ? task.assigned_to.name : 'Not Assigned' %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

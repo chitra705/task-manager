@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login</title>
+  <%= stylesheet_link_tag 'sessions', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'login', 'data-turbolinks-track': 'reload' %>
+  
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Log in</h2>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="field">
+        <%= f.label :email %><br />
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "styled-input" %>
+      </div>
+
+      <div class="field1">
+        <%= f.label :password %><br />
+        <div class="password-field-container">
+          <%= f.password_field :password, autocomplete: "current-password", class: "styled-input", id: "password_field" %>
+          <button type="button" id="toggle_password" class="password-toggle-button">
+            <i class="fa fa-eye" id="eye_icon"></i>
+          </button>
+        </div>
+      </div>
+
+      <% if devise_mapping.rememberable? %>
+        <div class="field3">
+          <%= f.check_box :remember_me %> Remember me
+        </div>
+      <% end %>
+
+      <div class="links field3">
+        <% if devise_mapping.recoverable? %>
+          <%= link_to "Forgot password?", new_password_path(resource_name) %>
+        <% end %>
+        <% if devise_mapping.registerable? %>
+          <%= link_to "Sign up?", new_registration_path(resource_name) %>
+        <% end %>
+       
+      </div>
+
+      <div class="actions">
+        <%= f.submit "Log in" %>
+      </div>
+    <% end %>
+
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Task</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+ 
+
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  
+  <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
+  <%= stylesheet_link_tag 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css' %>
+  <%= stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css' %>
+  <link rel="icon" type="image/ico" href="http://192.168.0.103:3000/assets/Ikasle_Logo.ico" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+
+  <%= stylesheet_link_tag 'home_page', media: 'all', 'data-turbo-track': 'reload' %>
+
+  <%= javascript_importmap_tags %>
+  <%= javascript_include_tag 'https://code.jquery.com/jquery-3.5.1.slim.min.js' %>
+  <%= javascript_include_tag 'https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js' %>
+  <%= javascript_include_tag 'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js' %>
+  <%= javascript_include_tag 'https://cdn.jsdelivr.net/npm/chart.js' %>
+  <%= javascript_include_tag 'https://cdn.jsdelivr.net/npm/chartkick@4.0.1/dist/chartkick.js' %>
+  <%= javascript_include_tag 'timeout_sessions', 'data-turbolinks-track': 'reload' %>
+
+  <%= javascript_include_tag 'active_admin' %>
+  <%= javascript_pack_tag 'application' %>
+  <meta name="csrf-token" content="<%= form_authenticity_token %>">
+
+ 
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light navbar-custom">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <%= image_tag 'Ikasle_Logo.png', alt: 'Logo', class: 'img-fluid rotate-on-hover', style:'height: 60px;' %>
+    </a>
+    <% if user_signed_in? %>
+    <div class="d-flex flex-column flex-md-row align-items-center">
+      <div class="active-session mr-2">CHECK IN: <span id="active-session-time">00:00:00</span></div>
+      <div id="break-session_btn" class="break-session mr-2" style="display: none;">BREAK TIME: <span id="break-session-time">00:00:00</span></div>
+      <button id="check-in-btn" class="btn btn-success mr-2">CHECK IN</button>
+      <button id="break-btn" class="btn btn-warning mr-2" style="display: none;">BREAK</button>
+      <button id="end-break-btn" class="btn btn-danger mr-2" style="display: none;">END BREAK</button>
+      <button id="check-out-btn" class="btn btn-danger mr-2" style="display: none;">CHECK OUT</button>
+
+    </div>
+    <% end %>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto align-items-center">
+        <li class="nav-item">
+          <%= link_to 'HOME', root_path, class: 'nav-link' %>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'DASHBOARDS', dashboard_index_path, class: 'nav-link' %>
+        </li>
+
+        <% if current_user&.has_role?(:admin) || current_user&.has_role?(:team_lead) || current_user&.has_role?(:manager) %>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="bucketsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              ADMIN
+            </a>
+            <div class="dropdown-menu" aria-labelledby="bucketsDropdown">
+              <%= link_to users_path, class: 'dropdown-item' do %>
+                <i class="bi bi-people-fill" style="margin-right: 5px;"> </i> Manage Users
+              <% end %>
+            
+              <%= link_to user_logs_path, class: 'dropdown-item' do %>
+                <i class="bi bi-browser-safari" style="margin-right: 5px;"> </i> Time Management
+              <% end %>
+              
+              <%= link_to leave_requests_path, class: 'dropdown-item' do %>
+                 <i class="bi bi-calendar2-minus-fill" style="margin-right: 5px;"> </i> Leave Requests
+              <% end %>
+
+              <%= link_to payslips_path, class: 'dropdown-item' do %>
+                <i class="bi bi-browser-safari" style="margin-right: 5px;"> </i> Payslip
+              <% end %>
+              <%= link_to payment_details_path, class: 'dropdown-item' do %>
+                <i class="bi bi-receipt" style="margin-right: 5px;"> </i> Payslip Details
+              <% end %>
+              <%= link_to daily_log_user_user_logs_path, class: 'dropdown-item' do %>
+                <i class="bi bi-calendar2-range-fill" style="margin-right: 5px;"> </i> User Logs
+              <% end %>
+              
+            </div>
+          </li>
+        <% end %>
+
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="bucketsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              BUCKETS
+            </a>
+            <div class="dropdown-menu" aria-labelledby="bucketsDropdown">
+              <%= link_to tasks_path, class: 'dropdown-item' do %>
+                <i class="fas fa-tasks" style="margin-right: 5px;"></i> View Tasks
+              <% end %>
+              <% if current_user&.has_role?(:admin) || current_user&.has_role?(:team_lead) || current_user&.has_role?(:manager) %>
+                <%= link_to new_task_path, class: 'dropdown-item' do %>
+                  <i class="fas fa-plus-circle" style="margin-right: 5px;"></i> New Task
+                <% end %>
+              <% end %>
+
+              <%= link_to leads_path, class: 'dropdown-item' do %>
+                <i class="bi bi-grid-3x3" style="margin-right: 5px;"></i> Leads
+              <% end %>
+
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <i class="fas fa-user"></i>
+          </a>
+          <% if user_signed_in? %>
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+            <%= link_to edit_user_registration_path, class: 'dropdown-item' do %>
+              <i class="fas fa-edit" style="margin-right: 5px;"></i> Edit Profile
+            <% end %>
+            <%= link_to user_sign_out_path, class: 'dropdown-item' do %>
+              <i class="fas fa-sign-out-alt" style="margin-right: 5px;"></i> Logout
+            <% end %>
+          </div>
+          <% else %>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+              <%= link_to new_user_session_path, class: 'dropdown-item' do %>
+                <i class="fas fa-sign-in-alt" style="margin-right: 5px;"></i> SIGN IN
+              <% end %>
+              <%= link_to new_user_registration_path, class: 'dropdown-item' do %>
+                <i class="fas fa-user-plus" style="margin-right: 5px;"></i> SIGN UP
+              <% end %>
+            </div>
+          <% end %>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<% flash.each do |key, message| %>
+  <div class="alert alert-<%= key == 'alert' ? 'warning' : 'success' %> alert-dismissible fade show" role="alert">
+    <%= message %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+<% end %>
+
+<%= yield %>
+
+<footer class="footer footer-custom mt-auto py-3" style="background-color: #051b2a;">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 text-left">
+        <%= image_tag 'Ikasle_Logo.png', alt: 'Logo', class: 'img-fluid',style: 'height:100px; width:100px' %> <br>       
+        <strong>Contact</strong>
+        <p>1639/A, 2nd Floor, DJ Building,<br> 
+        Hopes College, Avinashi Road, Peelamedu,<br>
+        Coimbatore - 641004</p>
+      </div>
+      <div class="col-md-4 text-left" style="margin-top: 30px;">
+        <strong>General Inquiries:</strong>
+        <p class = "num"><a href="tel:+917845132962">+91 7845132962</a></p>
+        <p><a href="tel:+919626368896">+91 9626368896</a></p>
+        <strong>Sales:</strong><br>
+        <p><a href="mailto:business@ikasle.in" class="social-link mail-link">business@ikasle.in</a></p>
+
+      </div>
+      <div class="col-md-4 text-left" style="margin-top:20px">
+        
+        <a href="https://www.linkedin.com/company/ikaslegroup" class="d-block mb-2 social-link linkedin-link">
+          <i class="fab fa-linkedin"></i> LinkedIn
+        </a>
+        <a href="https://www.instagram.com/ikaslegroup/" class="d-block mb-2 social-link instagram-link">
+          <i class="fab fa-instagram"></i> Instagram
+        </a>
+        <a href="https://www.facebook.com/ikaslegroup" class="d-block mb-2 social-link facebook-link">
+          <i class="fab fa-facebook"></i> Facebook
+        </a>
+
+        <a href="https://x.com/ikaslegroup" class="d-block mb-2 social-link x-link">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="15" fill="currentColor" class="bi bi-twitter-x" viewBox="0 0 16 16">
+            <path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z"/>
+          </svg> Twitter-x
+        </a>
+
+      </div>
+    </div>
+  </div>
+  <hr class="hr">
+  <p class = "copy">&copy; Ikasle Business Group -
+    <a href="https://www.ikasle.in/" class= "social-link mail-link">visit</a></p>
+</footer>
+
+<script type="text/javascript">
+  let checkInTime, checkOutTime, breakStartTime, breakEndTime;
+  let activeSessionTimer, breakSessionTimer;
+
+  const currentTime = new Date();
+  const timeDifference = (currentTime - checkInTime) / (1000 * 60 * 60);
+  if (timeDifference > 4) {
+    alert('Check-in time is greater than 8 hours!');
+  }
+
+  // Update active session timer
+  function startTimer() {
+    if (!checkInTime) return;
+
+    const now = new Date();
+    const elapsed = now - checkInTime;
+    const hours = Math.floor(elapsed / (1000 * 60 * 60));
+    const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+    const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+
+    document.getElementById('active-session-time').textContent =
+      `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      
+    activeSessionTimer = setTimeout(startTimer, 1000);
+  }
+
+  function stopTimer() {
+    clearTimeout(activeSessionTimer);
+    document.getElementById('active-session-time').textContent = "00:00:00";
+  }
+
+  // Update break session timer
+  function updateBreakSessionTimer() {
+    if (breakStartTime) {
+      const now = new Date();
+      const elapsed = now - breakStartTime;
+      const hours = Math.floor(elapsed / (1000 * 60 * 60));
+      const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+
+      document.getElementById('break-session-time').textContent =
+        `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      
+      breakSessionTimer = setTimeout(updateBreakSessionTimer, 1000);
+    }
+  }
+
+  function stopBreakTimer() {
+    clearTimeout(breakSessionTimer);
+    document.getElementById('break-session-time').textContent = "00:00:00";
+  }
+
+  // Check-in button click
+  document.getElementById('check-in-btn').addEventListener('click', () => {
+    document.getElementById('check-in-btn').style.display = 'none';
+    document.getElementById('check-out-btn').style.display = 'block';
+    document.getElementById('break-btn').style.display = 'block';
+
+    checkInTime = new Date();
+    sessionStorage.setItem('checkInTime', checkInTime.getTime());
+    document.getElementById('hidden-check-in').value = checkInTime.toISOString();
+
+    startTimer();
+    document.getElementById('user-log-form').submit();
+  });
+
+  // Check-out button click
+  document.getElementById('check-out-btn').addEventListener('click', () => {
+    const currentTime = new Date();
+    const timeDifference = (currentTime - checkInTime) / (1000 * 60 * 60); // Convert time difference to hours
+
+    if (timeDifference < 8) {
+      alert('Check-in time is less than 8 hours!');
+      <%# return;  %>
+    }
+
+    document.getElementById('check-out-btn').style.display = 'none';
+    document.getElementById('check-in-btn').style.display = 'block';
+    document.getElementById('break-btn').style.display = 'none';
+
+    checkOutTime = new Date();
+    sessionStorage.removeItem('checkInTime');
+    document.getElementById('hidden-check-out').value = checkOutTime.toISOString();
+
+    stopTimer();
+    document.getElementById('user-log-form').submit();
+  });
+
+  // Break button click
+  document.getElementById('break-btn').addEventListener('click', () => {
+    document.getElementById('break-btn').style.display = 'none';
+    document.getElementById('end-break-btn').style.display = 'block';
+    document.querySelector('.active-session').style.display = 'none';
+
+    breakStartTime = new Date();
+    sessionStorage.setItem('breakStartTime', breakStartTime.getTime());
+    document.getElementById('hidden-break_start-time').value = breakStartTime.toISOString();
+
+    stopTimer();
+    updateBreakSessionTimer();
+    document.getElementById('user-break-form').submit();
+  });
+
+  // End break button click
+  document.getElementById('end-break-btn').addEventListener('click', () => {
+    document.getElementById('break-btn').style.display = 'block';
+    document.getElementById('end-break-btn').style.display = 'none';
+    document.querySelector('.active-session').style.display = 'block';
+
+    breakEndTime = new Date();
+    sessionStorage.removeItem('breakStartTime');
+    stopBreakTimer();
+    document.getElementById('hidden-break_end-time').value = breakEndTime.toISOString();
+
+    startTimer();
+    document.getElementById('user-break-form').submit();
+  });
+
+  // On page load, restore state
+  document.addEventListener('DOMContentLoaded', () => {
+    const storedCheckInTime = sessionStorage.getItem('checkInTime');
+    const storedBreakStartTime = sessionStorage.getItem('breakStartTime');
+
+    if (storedCheckInTime) {
+      document.getElementById('check-in-btn').style.display = 'none';
+      document.getElementById('check-out-btn').style.display = 'block';
+      document.getElementById('break-btn').style.display = 'block';
+
+      checkInTime = new Date(parseInt(storedCheckInTime));
+      startTimer();
+
+    }
+
+    if (storedBreakStartTime) {
+      document.getElementById('break-btn').style.display = 'none';
+      document.getElementById('end-break-btn').style.display = 'block';
+      document.querySelector('.active-session').style.display = 'none';
+
+      breakStartTime = new Date(parseInt(storedBreakStartTime));
+      updateBreakSessionTimer();
+    }
+  });
+</script>
+
+
+<%= form_with url: update_user_log_home_path, method: :post, remote: true, html: { id: 'user-log-form' } do |form| %>
+  <%= form.hidden_field :check_in, id: 'hidden-check-in' %>
+  <%= form.hidden_field :check_out, id: 'hidden-check-out' %>
+  
+<% end %>
+
+
+
+<script>
+  document.getElementById('check-out-btn').addEventListener('click', () => {
+    document.getElementById('user-log-form').submit();
+  });
+  document.getElementById('check-in-btn').addEventListener('click', () => {
+    document.getElementById('user-log-form').submit();
+  });
+
+
+
+</script>
+
+
+  <%# break count %>
+
+<%= form_with url: update_user_break_home_path, method: :post, remote: true, html: { id: 'user-break-form' } do |form| %>
+  <%= form.hidden_field :break_start, id: 'hidden-break_start-time' %>
+  <%= form.hidden_field :break_end, id: 'hidden-break_end-time' %>
+  
+<% end %>
+
+
+<script>
+
+  document.getElementById('break-btn').addEventListener('click', () => {
+    document.getElementById('user-break-form').submit();
+  });
+  document.getElementById('end-break-btn').addEventListener('click', () => {
+    document.getElementById('user-break-form').submit();
+  });
+ 
+</script>
+
+
+<%# screen monitering %>
+
+
+
+<form id="activityForm" action="/update_user_log" method="POST">
+
+  
+  <input type="hidden" name="last_active_time" id="last_active_time" value="<%= @last_activity_time %>">
+  <input type="hidden" id="user_logged_in" value="<%= user_signed_in? %>">
+  
+  <button type="submit" style="display: none;">Update Activity</button>
+</form>
+
+
+
+
+
+
+
+<script>
+  const userLoggedIn = document.getElementById('user_logged_in').value === 'true';
+
+  if (userLoggedIn) {
+    let lastActivityTime = new Date(); 
+
+    
+    document.addEventListener('mousemove', () => {
+      lastActivityTime = new Date();
+    });
+
+    document.addEventListener('keydown', () => {
+      lastActivityTime = new Date(); 
+    });
+
+    setInterval(() => {
+      const form = document.getElementById('activityForm');
+      const lastActiveField = document.getElementById('last_active_time');
+      
+      lastActiveField.value = lastActivityTime.toISOString();
+      
+      form.submit();
+      
+    }, 30000); 
+  }
+</script>
+
+
+
+
+
+
+
+
+</body>
+
+</html>
+

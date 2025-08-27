@@ -1,0 +1,35 @@
+<!-- app/views/passwords/new.html.erb -->
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Forgot your password?</title>
+  <%= stylesheet_link_tag 'passwords', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+  <div class="form-container">
+    <h3>Forgot password?</h3>
+    <div class="row">
+
+      <div class="col-md-6 d-flex align-items-center justify-content-center">
+        <%= image_tag 'forgot_passwrd.png', alt: 'otp', class: 'img-fluid rotate-on-hover', style: 'height: 460px;' %>
+      </div>
+      
+      <div class="col-md-6 d-flex align-items-center">
+        <%= form_for :passwrd, url: passwrds_path, html: { method: :post } do |f| %>
+          <div class="field">
+            <%= f.label :email %><br />
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "styled-input" %>
+          </div>
+          <%= f.submit 'Submit', class: "submit" %>
+        <% end %>
+      </div>
+
+      
+    </div>
+  </div>
+</body>
+</html>
+
+
+

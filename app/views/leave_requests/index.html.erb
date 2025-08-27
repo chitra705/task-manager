@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leave Requests</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+ 
+  <%= stylesheet_link_tag 'leave_req_table', media: 'all', 'data-turbo-track': 'reload' %>
+
+  <style type="text/css">
+    
+  </style>
+  
+</head>
+<body>
+  <div class= "leave_table">
+
+    <div class="container container-custom mt-5">
+    <h5 class="mb-4 text-center">LEAVE REQUEST PENDING LIST</h5>
+    <table class="table table-striped table-bordered">
+      <thead class="thead-dark" style="text-align: center;">
+        <tr>
+          <th>User</th>
+          <th>Date</th>
+          <th>Reason</th>
+          <th class="text-center" colspan="2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @leave_requests.each do |lq| %>
+          <tr>
+            <td><%= lq.user.name %></td>
+            <td><%= lq.leave_date.strftime("%Y-%m-%d") %></td>
+            <td><%= lq.leave_reason %></td>
+            <td>
+              <%= link_to 'Accept', accept_leave_request_path(lq), method: :patch, class: 'btn btn-success btn-sm' %>
+            </td>
+            <td>
+              <%= link_to 'Reject', reject_leave_request_path(lq), method: :patch, class: 'btn btn-danger btn-sm' %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="container container-custom mt-5">
+    <h5 class="mb-4 text-center">LEAVE REQUEST LIST</h5>
+    <table class="table table-striped table-bordered">
+      <thead class="thead-dark" style="text-align: center;">
+        <tr>
+          <th>User</th>
+          <th>Date</th>
+          <th>Reason</th>
+          <th class="text-center" colspan="2">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @accepted_leaves.each do |lq| %>
+          <tr>
+            <td><%= lq.user.name %></td>
+            <td><%= lq.leave_date.strftime("%Y-%m-%d") %></td>
+            <td><%= lq.leave_reason %></td>
+            <% if lq.status == "accepted" %>
+                <td style = "color:green;">Accepted</td>        
+            <% elsif lq.status == "rejected" %>
+                <td style = "color: red;">Rejected</td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+</body>
+</html>

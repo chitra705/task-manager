@@ -1,0 +1,8 @@
+<%= CSV.generate(headers: true) do |csv| %>
+  <%= csv << ['Title', 'Description', 'Status', 'Assigned To'] %>
+  
+  <% @tasks.each do |task| %>
+    <% user = User.find_by(id: task.assigned_to_id) %>
+    <%= csv << [task.title, task.description, task.status, user ? user.name : 'Not Assigned'] %>
+  <% end %>
+<% end %>

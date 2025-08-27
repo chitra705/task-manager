@@ -1,0 +1,2 @@
+class TimeValue < ApplicationRecord
+end

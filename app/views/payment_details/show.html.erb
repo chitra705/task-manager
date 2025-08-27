@@ -1,0 +1,7 @@
+<h1>Payment Detail</h1>
+
+<p><strong>Emp ID:</strong> <%= @payment_detail.emp_id %></p>
+<p><strong>Total Salary:</strong> <%= @payment_detail.total_salary %></p>
+<p><strong>Given Amount:</strong> <%= @payment_detail.given_amount %></p>
+<p><strong>Details Image:</strong></p>
+<%= image_tag @payment_detail.details_img if @payment_detail.details_img.attached? %>

@@ -1,0 +1,213 @@
+body {
+  font-family: Arial, sans-serif;
+}
+/*animation: fadeInLeft 1.5s ease-in-out;*/
+.front {
+/*  background-image: url('bk3.jpg');*/
+  position:sticky ;
+  background-size: cover;
+  background-position: center;
+  padding: 50px 0;
+  color: #fff;
+  opacity: 0.8;
+  height: 70%;
+}
+.front::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+/*  background-image: url('bk3.jpg');*/
+  background-size: cover;
+  background-position: center;
+  opacity: 0.8;
+  z-index: -1;
+}
+.cldr{
+  margin-top: 40px;
+}
+.custom-image1 {
+  width: 80%;
+  width:650px;
+  padding-left: 15%;
+  height: 500px;
+}
+#cldr{
+/*  background-color: #fff70027;*/
+}
+#cldr h6{
+  text-align: center;
+  padding: 30px;
+  font-size: 30px;
+  font-weight: bold;
+  color: rgb(2, 60, 107);
+}
+.custom-heading {
+  font-size: 20px;
+  margin-top:55%;
+  font-weight: bold;
+  animation: fadeInLeft 1.5s ease-in-out; /* Add animation */
+  padding-left: 20px;
+
+}
+
+.custom-img_banner{
+  animation: fadeInRight 1.5s ease-in-out;
+  height:800px !important;
+}
+.custom-paragraph {
+  font-size: 1.1rem;
+  margin-top: 10px;
+  font-family: Georgia, serif;
+  animation: fadeInRight 1.5s ease-in-out; /* Add animation */
+}
+#get-started{
+  margin-left: 15px;
+  margin-bottom: 20%;
+
+}
+.bus_grp{
+  margin-left: 250px;
+  color: black;
+  font-weight: bolder;
+  font-size: 25px;
+;
+}
+.custom-button{
+  margin-left: 40px;
+  margin-bottom: 110px;
+  border-radius: 5px;
+  font-weight: bold;
+  background-color: rgb(2, 60, 107);
+}
+/* Define keyframes for animations */
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+#bk {
+  margin-bottom: 30px;
+  margin-top: 20px;
+}
+h4 {
+  text-align: center;
+  color: #143b9a;
+  font-weight: bold;
+  margin-top: 10px;
+  margin-bottom: 40px;
+  padding-top: 50px;
+  padding-bottom: 30px;
+}
+span{
+  color: #143b9a;
+  font-weight: bold;
+}
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;800&display=swap");
+
+.month {
+  width: 500px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin: 25px;
+  padding: 15px;
+  background: rgb(238, 174, 202);
+  background: radial-gradient(circle, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.month h5 {
+  color: black;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px;
+}
+
+.calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.calendar div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.calendar div.today {
+  background: #ECECEC;
+  font-weight: 800;
+}
+
+.calendar div.present {
+  background: #81C784;
+  font-weight: bold;
+}
+.calendar div.absent {
+  background-color: #B71C1C;
+  font-weight: bold;
+}
+
+.calendar div.empty {
+  background: transparent;
+}
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.leave_days {
+  border: 2px solid dimgray;
+  padding: 4px 8px;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 12px;
+}
+.green {
+  background-color: #81C784 !important;
+}
+
+.yellow {
+  background-color: #FFE082 !important;
+}
+
+.red {
+  background-color: #E57373 !important;
+}
+.sunday{
+  background-color: #90CAF9 !important;
+  font-weight: bold;
+}
+.three-d-text{
+  color: rgb(1, 57, 102); /* Base color */
+  text-shadow: 2px 2px 0 rgb(2, 60, 107), /* Top shadow */
+               4px 4px 0 rgb(5, 102, 182), /* Mid shadow */
+               6px 6px 0 rgb(1, 23, 41), /* Bottom shadow */
+               8px 8px 5px rgba(0, 0, 0, 0.3); /* Shadow effect for 3D look */
+  
+  font-weight: bold;
+  letter-spacing: 2px;
+  font-size: 130px !important;
+}
+

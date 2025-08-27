@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboards</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+  <%= javascript_include_tag 'https://cdn.jsdelivr.net/npm/chart.js' %>
+  <%= javascript_include_tag 'https://cdn.jsdelivr.net/npm/chartkick@4.0.1/dist/chartkick.js' %>
+  <%= stylesheet_link_tag 'dashboard', media: 'all', 'data-turbo-track': 'reload' %>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    .filter_btn{
+      background-color: #007bff;
+      color:white;
+    }
+
+  .table-wrapper {
+    margin: 30px 0;
+    overflow-x: auto;
+<%#     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); %>
+    border-radius: 8px;
+    padding: 15px;
+    min-height: 652px;
+    width:840px;
+    background-color: #ffffff61;
+  }
+
+  /* Table basic styling */
+  .table {
+    font-size: 14px;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  /* Table headers */
+  .thead-dark {
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    text-align: center;
+    font-weight: bold;
+  }
+
+  /* Cell padding and borders */
+  .table td, .table th {
+    padding: 15px 20px;
+    vertical-align: middle;
+    text-align: center;
+    border: 1px solid #dee2e6;
+  }
+
+  /* Row hover effect */
+  .table-hover tbody tr:hover {
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transform: scale(1.02);
+    transition: background-color 0.3s, transform 0.3s;
+  }
+
+  /* Status colors */
+  .table td:nth-child(2) {
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+
+  .table td:nth-child(2).pending {
+    color: #f39c12; /* Yellow for pending */
+  }
+
+  .table td:nth-child(2).approved {
+    color: #27ae60; /* Green for approved */
+  }
+
+  .table td:nth-child(2).rejected {
+    color: #e74c3c; /* Red for rejected */
+  }
+
+ .leave-reason {
+    display: none;
+  }
+
+  .leave-reason-cell:hover .leave-reason {
+    display: inline !important;
+  }
+
+  .leave-reason-cell:hover .hover-text {
+    display: none;
+  }
+
+  .hover-text {
+    font-size: 14px;
+    color: #3498db;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+
+  /* "No leave requests" message */
+  .text-center {
+    font-size: 16px;
+    font-weight: bold;
+    color: #888;
+    padding: 15px;
+  }
+
+  /* Styling for the table footer */
+  .table-footer {
+    font-size: 14px;
+    color: #777;
+    text-align: right;
+    padding: 10px 15px;
+  }
+  /* Status colors */
+.table td:nth-child(2) {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+/* Accepted (Green) */
+.table td:nth-child(2).accepted {
+  color: #27ae60; /* Green for Approved */
+  background-color: #dff0d8; /* Light Green background */
+  border-radius: 5px;
+  padding: 5px;
+}
+
+/* Pending (Yellow) */
+.table td:nth-child(2).pending {
+  color: #f39c12; /* Yellow for Pending */
+  background-color: #fff3cd; /* Light Yellow background */
+  border-radius: 5px;
+  padding: 5px;
+}
+
+/* Rejected (Red) */
+.table td:nth-child(2).rejected {
+  color: #e74c3c; /* Red for Rejected */
+  background-color: #f8d7da; /* Light Red background */
+  border-radius: 5px;
+  padding: 5px;
+}
+
+@media (max-width: 768px) {
+  .table-wrapper {
+    
+    min-height: 652px;
+    width:350px;
+  }
+  .card-board{
+
+    width:300px;
+    margin-left: 4px !important;
+    margin-left: 4px !important;
+  }
+}
+
+
+<%# task duration style %>
+
+/* Task Card Styles */
+.task-card {
+  border: none;
+  border-radius: 10px;
+  background: #ffffff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  transition: all 0.3s ease;
+}
+
+.task-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.time-remaining {
+  font-size: 1rem;
+  color: #888;
+  font-weight: 600;
+}
+
+.chart-description {
+  max-width: 50%;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+.task-chart {
+  flex-grow: 1;
+  max-width: 150px;
+}
+
+/* Form Styling */
+.form-select {
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 0.9rem;
+}
+
+.btn-custom {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  padding: 5px 15px;
+  font-size: 0.85rem;
+  transition: all 0.2s ease;
+}
+
+.btn-custom:hover {
+  background-color: #0056b3;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .chart-description {
+    max-width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .task-chart {
+    max-width: 100%;
+  }
+
+  .btn-custom {
+    width: 100%;
+  }
+}
+
+
+</style>
+
+
+
+</head>
+<body>
+
+  <h2>DASHBOARDS</h2>
+
+<div class="row1">
+  <div class="col-lg-4">
+    <div style="margin-left:30px; margin-right:30px">
+      <%= image_tag 'today_log.png', alt: 'Logo', class: 'img-fluid' %>
+    </div>
+  </div>
+   
+  <!-- Right Side: Chart -->
+  <div class="col-lg-8">
+    <div class="today-log" style="margin-left:60px; margin-right:60px">
+      <h4>Today Log</h4>
+      <div class="chart-container">
+        <%= area_chart @user_day_logs, height: '150px' %>
+      </div>
+      <p class="status-info">Check Log: <%= @check_log %> | Break Log: <%= @break_log %></p>
+    </div>
+  </div>
+</div>
+
+
+
+
+  <% if current_user.admin? || current_user.manager? || current_user.team_lead? %>
+    
+    <section>
+     <div>
+        
+      <div class="row1">
+        
+        <div class="col-lg-6">
+          <div class="row1">
+            <!-- First Row: Card 1 -->
+            <div class="col-md-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".4s">
+              <div class="tw-case-study-box card-board">
+                 
+                 <h5>Tasks Created per Day</h5>
+                 
+                   <%= bar_chart @tasks_created_per_day, height: '150px', download: {filename: "boom"} %>
+                   <div class="text-center">
+                 </div>
+              </div>
+            </div>
+            
+            <div class="col-md-6 wow fadeInUp" data-wow-duration="1s" data-wow-delay=".4s">
+              <div class="tw-case-study-box cont-design card-board">
+                 <h5>Task Status Distribution</h5>
+                 <%= pie_chart @status_counts, height: '150px', download: {filename: "boom"} %>
+                 <div class="text-center">
+                    <p class="status-info">Completed: <%= @status_counts['completed'] %> | Incomplete: <%= @status_counts['active'].to_i + @status_counts['paused'].to_i %>
+                      
+                    </p>
+                  </div>
+              </div>
+            </div>
+
+          
+
+             <!-- Second Row: Card 4 -->
+             <div class="col-md-6 wow fadeInUp mt-5" data-wow-duration="1s" data-wow-delay=".4s">
+                <div class="tw-case-study-box cont-design mt-2 card-board">
+                  <h5>Average Completion Time per Week</h5>
+                  <%= line_chart @average_completion_time_per_week, height: '150px', download: {filename: "boom"} %>
+                  <div class="text-center">
+                    <p class="status-info">Completed: <%= @status_counts['completed'] %> | Incomplete: <%= @status_counts['active'].to_i + @status_counts['paused'].to_i %></p>
+                  </div>
+                </div>
+            </div>
+
+            <!-- Second Row: Card 3 -->
+            <div class="col-md-6 wow fadeInUp mt-5" data-wow-duration="1s" data-wow-delay=".4s">
+              <div class="tw-case-study-box cont-design mt-2  card-board">
+                <h5>Tasks Assigned to Members</h5>
+                <%= bar_chart({ "Assigned" => @assigned_count, "Not Assigned" => @not_assigned_count }, height: '150px', download: {filename: "boom"} ) %>
+                <div class="text-center">
+                  <p class="status-info">Assigned: <%= @assigned_count %> | Not Assigned: <%= @not_assigned_count %></p>
+                </div>
+                
+             </div>
+            </div>
+
+           
+
+
+
+          </div>
+        </div class="row1">
+          <div class="mt-2 col-lg-6 ">
+            <div class="table-wrapper">
+              <table class="table table-hover table-striped table-bordered table-sm">
+                <thead class="thead-dark">
+                  <tr>
+                    <th>Leave Date</th>
+                    <th>Status</th>
+                    <th>Leave Reason</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if @lr_list.present? %>
+                    <% @lr_list.each do |leave_request| %>
+                      <tr class="leave-request-row">
+                        <td><%= leave_request.leave_date.strftime('%Y-%m-%d') %></td>
+                        <td class="<%= leave_request.status.downcase %>">
+                          <%= leave_request.status.capitalize %>
+                        </td>
+                        <td class="leave-reason-cell">
+                          <span class="leave-reason" style="display: none;"><%= leave_request.leave_reason %></span>
+                          <span class="hover-text">See Reason</span>
+                        </td>
+                      </tr>
+                    <% end %>
+                  <% else %>
+                    <tr>
+                      <td colspan="3" class="text-center">No leave requests found.</td>
+                    </tr>
+                  <% end %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+      </div>
+      </div>
+    </section>
+
+
+  <% else %>
+    <div class="div1">
+      <div class="div2">
+        <h5>Task Status Distribution</h5>
+        <%= pie_chart @user_status_counts, height: '200px' %>
+        <p class="status-info">Completed: <%= @user_status_counts['completed'].to_i %> | Incomplete: <%= @user_status_counts['active'].to_i + @user_status_counts['paused'].to_i %></p>
+      </div>
+
+      <div class="div2">
+        <h5>Active Tasks</h5>
+        <%= line_chart @user_status_counts, height: '200px' %>
+        <p class="status-info">Completed: <%= @user_status_counts['completed'].to_i %> | Incomplete: <%= @user_status_counts['active'].to_i + @user_status_counts['paused'].to_i %></p>
+      </div>
+    </div>
+
+  <% end %>
+
+  <h4 style="text-align:center">TASK DURATIONS</h4>
+
+  <div class="justify-content-center task_duration">
+    <% if @user_active_tasks.present? %>
+      <% @user_active_tasks.each_slice(3) do |tasks| %>
+        <div class="row">
+          <% tasks.each do |task| %>
+            <div class="col-md-4">
+              <div class="card mb-3 task-card">
+                <div class="card-body">
+                  <!-- Task Title and Due Date -->
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <h6 class="card-title mb-0 mr-3"><strong><%= task.title.to_s.titleize %>:</strong></h6>
+                    <% if task.due_start_date.present? && task.due_end_date.present? %>
+                      <span class="time-remaining ml-auto" data-start="<%= task.due_start_date %>" data-end="<%= task.due_end_date %>"></span>
+                    <% end %>
+                  </div>
+
+                  <!-- Chart and Description -->
+                  <% if task.due_start_date.present? && task.due_end_date.present? %>
+                    <div class="d-flex align-items-center mb-3">
+                      
+                      <%= pie_chart @task_time_distributions[task.title], height: '150px', class: 'task-chart' %>
+                    </div>
+                  <% else %>
+                    <span>Due dates not set</span>
+                  <% end %>
+
+                  <!-- Status and Timer Row -->
+                  <div class="d-flex justify-content-between align-items-center mt-4">
+                    <% task_log = task.task_logs.last %>
+                    <% if task_log && task_log.status == 'active' %>
+                      <p>Active: <span id="active-timer">00:00</span></p>
+                    <% else %>
+                      <p>Status: <span id="status-message">Pause</span></p>
+                    <% end %>
+
+                    <!-- Status Form -->
+                    <%= form_with url: update_task_log_status_task_path(task), method: :post, local: true do %>
+                      <div class="d-flex align-items-center">
+                        <%= select_tag :status, options_for_select(TaskLog.statuses.keys.map { |status| [status.humanize, status] }, task.status), class: 'form-select mr-2' %>
+                        <%= hidden_field_tag :task_id, task.id %>
+                        <%= hidden_field_tag :active, '', id: 'active-timer-hidden' %>
+                        <%= submit_tag 'Update', class: 'btn btn-custom btn-sm' %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    <% else %>
+      <div style="text-align:center; padding-bottom: 50px; font-weight: bold; font-size: 30px; color: gray;">
+        <%= image_tag 'no_task.png', alt: 'No active tasks', style: 'max-width: 100%; height: 100px;' %> No Active Task!
+      </div>
+    <% end %>
+  </div>
+
+
+  <%# user current date log table  %>
+
+<!-- Display filtered data -->
+
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    function updateTimers() {
+      const timers = document.querySelectorAll('.time-remaining');
+
+      timers.forEach(timer => {
+        const start = new Date(timer.getAttribute('data-start'));
+        const end = new Date(timer.getAttribute('data-end'));
+        const now = new Date();
+
+        if (now >= end) {
+          timer.textContent = 'Task is overdue';
+          timer.classList.add('overdue-message');
+          return;
+        }
+
+        const totalSeconds = Math.floor((end - now) / 1000);
+        const days = Math.floor(totalSeconds / (3600 * 24));
+        const hours = Math.floor((totalSeconds % (3600 * 24)) / 3600);
+        const minutes = Math.floor((totalSeconds % 3600) / 60);
+        const seconds = totalSeconds % 60;
+
+        timer.textContent = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      });
+    }
+
+    setInterval(updateTimers, 1000);
+    updateTimers();
+  });
+</script>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var timerElement = document.getElementById('active-timer');
+    var hiddenField = document.getElementById('active-timer-hidden');
+    var initialElapsedTime = <%= @task_log.present? ? @task_log.total_elapsed_time : 0 %>;
+
+    var updateTimer = function() {
+      var minutes = Math.floor(initialElapsedTime / 60);
+      var seconds = initialElapsedTime % 60;
+      timerElement.textContent = minutes + 'm ' + seconds + 's';
+      
+      hiddenField.value = initialElapsedTime;
+      initialElapsedTime += 1;
+    };
+
+    if (timerElement) {
+      setInterval(updateTimer, 1000);
+    }
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const filterBtn = document.getElementById('toggle-filter-btn');
+    const filterForm = document.getElementById('filter-form');
+
+    filterBtn.addEventListener('click', () => {
+      // Toggle the visibility of the filter form
+      filterForm.classList.toggle('d-none');
+    });
+  });
+</script>
+ 
+</body>
+</html>

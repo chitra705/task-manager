@@ -1,0 +1,100 @@
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+   <%= stylesheet_link_tag 'task_create', media: 'all', 'data-turbolinks-track': 'reload' %>
+</head>
+<body>
+
+<h3 class="text-center">CREATE TASK</h3>
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="task">
+        <%= form_with(model: @project_task, local: true, url: tasks_path) do |form| %>
+          <% if @project_task.errors.any? %>
+            <div id="error_explanation" class="alert alert-danger">
+              <h2><%= pluralize(@project_task.errors.count, "error") %> prohibited this task from being saved:</h2>
+              <ul>
+                <% @project_task.errors.full_messages.each do |message| %>
+                  <li><%= message %></li>
+                <% end %>
+              </ul>
+            </div>
+          <% end %>
+
+          <div class="mb-3">
+            <%= form.label :title, class: "form-label" %>
+            <%= form.text_field :title, class: "form-control" %>
+          </div>
+
+          <div class="mb-3">
+            <%= form.label :description, class: "form-label" %>
+            <%= form.text_area :description, class: "form-control" %>
+          </div>
+
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <%= form.label :team_type, class: "form-label" %>
+              <%= form.select :team_type, options_for_select(User.team_types.keys.map { |key| [key.humanize, User.team_types[key]] }, prompt: 'Select Team'), class: "form-select" %>
+            </div>
+            <div class="col-md-4">
+              <%= form.label :assigned_to_id, "Assign To", class: "form-label" %>
+              <%= form.select :assigned_to_id, options_for_select(User.all.map { |user| [user.name, user.id] }, prompt: 'Select User'), class: "form-select" %>
+            </div>
+            <div class="col-md-4">
+              <%= form.label :status, class: "form-label" %>
+              <%= form.select :status, ProjectTask.statuses.keys.map { |status| [status.humanize, status] }, class: "form-select" %>
+            </div>
+          </div>
+          
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <%= form.label :due_start_date, "Start Date", class: "form-label w-100" %>
+              <%= form.date_field :due_start_date, class: "form-control" %>
+            </div>
+            <div class="col-md-6">
+              <%= form.label :due_end_date, "End Date", class: "form-label" %>
+              <%= form.date_field :due_end_date, class: "form-control" %>
+            </div>
+          </div>
+
+          <div class="actions">
+            <%= form.submit 'Create', class: "btn btn-gray" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="file-upload task">
+        <h4>Upload Excel File</h4>
+        <%= form_with(url: upload_file_tasks_path, local: true, method: :post, html: { multipart: true }) do |form| %>
+          <div class="mb-3 text-center">
+            <%= form.label :file, "Select Excel File", class: "form-label" %>
+            <div class="input-group justify-content-center">
+              <%= form.file_field :file, accept: ".xlsx", class: "form-control d-none", id: "file-upload" %>
+              <span class="input-group-text" id="upload-icon" style="cursor: pointer;" onclick="document.getElementById('file-upload').click();">
+                <i class="fas fa-upload"></i>
+              </span>
+            </div>
+            <div id="file-name" class="text-center"></div>
+          </div>
+          <div class="actions text-center">
+            <%= form.submit 'Upload File', class: "btn btn-gray" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= link_to 'Back', tasks_path, class: "btn btn-gray" %>
+
+<script>
+  document.getElementById('file-upload').addEventListener('change', function(event) {
+    var fileName = event.target.files[0].name;
+    document.getElementById('file-name').innerText = fileName;
+  });
+</script>
+</body>
+</html>
