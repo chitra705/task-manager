@@ -1,28 +1,33 @@
-# syntax = docker/dockerfile:1
+# syntax=docker/dockerfile:1
 
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
+# Ruby version
 ARG RUBY_VERSION=3.0.0
 FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
 
-# Rails app lives here
+# Set working directory
 WORKDIR /rails
 
-# Set production environment
+# Production environment
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle" \
     BUNDLE_WITHOUT="development"
 
-
-# Throw-away build stage to reduce size of final image
+# -----------------------------
+# Build stage
+# -----------------------------
 FROM base as build
 
-# Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config
+# Fix Buster repo + install build dependencies
+RUN sed -i 's|deb.debian.org|ftp.debian.org|g' /etc/apt/sources.list && \
+    apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git libvips pkg-config && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
-# Install application gems
+# Copy Gemfile first to leverage caching
 COPY Gemfile Gemfile.lock ./
+
+# Install gems
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
@@ -30,33 +35,37 @@ RUN bundle install && \
 # Copy application code
 COPY . .
 
-# Precompile bootsnap code for faster boot times
+# Precompile bootsnap code
 RUN bundle exec bootsnap precompile app/ lib/
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+# Precompile Rails assets (without RAILS_MASTER_KEY)
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
-# Throw-away build stage to reduce size of final image
-FROM base as build
+# -----------------------------
+# Final runtime stage
+# -----------------------------
+FROM base
 
-# Install packages needed to build gems
+# Install runtime dependencies
 RUN sed -i 's|deb.debian.org|ftp.debian.org|g' /etc/apt/sources.list && \
     apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
-    
-# Copy built artifacts: gems, application
+    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
+
+# Copy built gems & app
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build /rails /rails
 
-# Run and own only the runtime files as a non-root user for security
+# Run as non-root user
 RUN useradd rails --create-home --shell /bin/bash && \
     chown -R rails:rails db log storage tmp
 USER rails:rails
 
-# Entrypoint prepares the database.
+# Entrypoint for DB prep
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Start the server by default, this can be overwritten at runtime
+# Expose Rails port
 EXPOSE 3000
+
+# Default CMD
 CMD ["./bin/rails", "server"]
