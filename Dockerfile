@@ -2,7 +2,7 @@
 
 # Ruby version
 ARG RUBY_VERSION=3.0.0
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim-bullseye as base
 
 # Set working directory
 WORKDIR /rails
@@ -18,9 +18,8 @@ ENV RAILS_ENV="production" \
 # -----------------------------
 FROM base as build
 
-# Fix Buster repo + install build dependencies
-RUN sed -i 's|deb.debian.org|ftp.debian.org|g' /etc/apt/sources.list && \
-    apt-get update -qq && \
+# Install build dependencies
+RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential git libvips pkg-config && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
@@ -47,8 +46,7 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 FROM base
 
 # Install runtime dependencies
-RUN sed -i 's|deb.debian.org|ftp.debian.org|g' /etc/apt/sources.list && \
-    apt-get update -qq && \
+RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl libsqlite3-0 libvips && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
